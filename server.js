@@ -57,7 +57,7 @@ async function run() {
 }
 run().catch(console.dir);
 
-app.use('/', async (req, res) => {
+app.use('/api', async (req, res) => {
   try {
     await client.connect();
     console.log("Connected to MongoDB");
@@ -65,7 +65,7 @@ app.use('/', async (req, res) => {
     const collectionName = "currency_rate";
     const database = client.db(dbName);
     const collection = database.collection(collectionName);
-    const currencyRateObj = await collection.findOne({ type: "USD_INR" });
+    const currencyRateObj = await collection.findOne({ type: `${req.query.fromCurrency}_${req.query.toCurrency}` });
     res.json(currencyRateObj);
   } catch(error) {
     console.log(error);
