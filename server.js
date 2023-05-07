@@ -1,10 +1,15 @@
 const express = require('express');
 const axios = require('axios');
 const { MongoClient, ServerApiVersion } = require('mongodb');
+var cors = require('cors');
 require('dotenv').config();
+
+ 
 
 const port = process.env.PORT || 9000;
 const app = express();
+
+app.use(cors());
 
 const uri = `mongodb+srv://surajitmaity12345:${process.env.MONGODB_PASSWORD}@cluster0.gia9dyn.mongodb.net/?retryWrites=true&w=majority`;
 
