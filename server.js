@@ -3,7 +3,7 @@ const axios = require('axios');
 const { MongoClient, ServerApiVersion } = require('mongodb');
 require('dotenv').config();
 
-const port = 9000;
+const port = process.env.PORT || 9000;
 const app = express();
 
 const uri = `mongodb+srv://surajitmaity12345:${process.env.MONGODB_PASSWORD}@cluster0.gia9dyn.mongodb.net/?retryWrites=true&w=majority`;
@@ -17,7 +17,6 @@ const client = new MongoClient(uri, {
   }
 });
 
-let currencyRateObj;
 async function run() {
   setInterval(async () => {
     try {
@@ -37,7 +36,7 @@ async function run() {
       });
       const currentRate = response.data.new_amount;
       
-      currencyRateObj = await collection.findOne({ type: "USD_INR" });
+      const currencyRateObj = await collection.findOne({ type: "USD_INR" });
       if (currencyRateObj.rateList.length >= 5) {
         currencyRateObj.rateList.shift();
       }
@@ -54,12 +53,26 @@ async function run() {
       await client.close();
       console.log("Disconnected");
     }
-  }, 10000);
+  }, 1000 * 60 * 60 * 24);
 }
 run().catch(console.dir);
 
 app.use('/', async (req, res) => {
-  res.json(currencyRateObj);
+  try {
+    await client.connect();
+    console.log("Connected to MongoDB");
+    const dbName = "currency_converter";
+    const collectionName = "currency_rate";
+    const database = client.db(dbName);
+    const collection = database.collection(collectionName);
+    const currencyRateObj = await collection.findOne({ type: "USD_INR" });
+    res.json(currencyRateObj);
+  } catch(error) {
+    console.log(error);
+  } finally {
+    await client.close();
+    console.log("Disconnected");
+  }
 });
 
 app.listen(port, () => {
