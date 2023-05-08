@@ -58,7 +58,7 @@ async function run() {
       await client.close();
       console.log("Disconnected");
     }
-  }, 1000 * 60);
+  }, 1000 * 60 * 60 * 24);
 }
 run().catch(console.dir);
 
