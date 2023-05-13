@@ -4,8 +4,6 @@ const { MongoClient, ServerApiVersion } = require('mongodb');
 var cors = require('cors');
 require('dotenv').config();
 
- 
-
 const port = process.env.PORT || 9000;
 const app = express();
 
@@ -45,11 +43,14 @@ async function run() {
       if (currencyRateObj.rateList.length >= 5) {
         currencyRateObj.rateList.shift();
       }
-      currencyRateObj.rateList.push(currentRate);
+      currencyRateObj.rateList.push({
+        'rate': currentRate,
+        'date': getCurrentDate(),
+      });
       await collection.updateOne(
         { type: 'USD_INR' },
         {
-          $set: { 'rateList': currencyRateObj.rateList, 'date': new Date() },
+          $set: { 'rateList': currencyRateObj.rateList },
           $currentDate: { lastModified: true }
         }
       );
@@ -61,6 +62,14 @@ async function run() {
   }, 1000 * 60 * 60 * 24);
 }
 run().catch(console.dir);
+
+function getCurrentDate() {
+  const currentDate = new Date();
+  const date = currentDate.getDate();
+  const month = currentDate.getMonth() + 1;
+  const year = currentDate.getFullYear();
+  return `${date}-${month}-${year}`;
+}
 
 app.use('/api', async (req, res) => {
   try {
