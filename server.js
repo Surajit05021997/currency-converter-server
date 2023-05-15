@@ -24,7 +24,6 @@ async function run() {
   setInterval(async () => {
     try {
       await client.connect();
-      console.log("Connected to MongoDB");
       const dbName = "currency_converter";
       const collectionName = "currency_rate";
       const database = client.db(dbName);
@@ -53,13 +52,13 @@ async function run() {
           $set: { 'rateList': currencyRateObj.rateList },
           $currentDate: { lastModified: true }
         }
-      );
+        );
+        console.log(`DB updated on ${new Date()}`);
     } finally {
       // Ensures that the client will close when you finish/error
       await client.close();
-      console.log("Disconnected");
     }
-  }, 1000 * 60);
+  }, 1000 * 60 * 30);
 }
 run().catch(console.dir);
 
