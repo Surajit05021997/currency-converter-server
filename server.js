@@ -59,7 +59,7 @@ async function run() {
       await client.close();
       console.log("Disconnected");
     }
-  }, 1000 * 60 * 60 * 24);
+  }, 1000 * 60);
 }
 run().catch(console.dir);
 
