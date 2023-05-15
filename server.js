@@ -58,7 +58,7 @@ async function run() {
       // Ensures that the client will close when you finish/error
       await client.close();
     }
-  }, 1000 * 60 * 2);
+  }, 1000 * 60 * 12);
 }
 run().catch(console.dir);
 
