@@ -46,7 +46,7 @@ app.use('/api', async (req, res) => {
   }
 });
 
-app.use('/api/updateDB', async (req, res) => {
+app.use('/updateDB', async (req, res) => {
   try {
     await client.connect();
     const dbName = "currency_converter";
