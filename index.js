@@ -75,8 +75,8 @@ app.use('/updateDB', async (req, res) => {
       { type: 'USD_INR' },
       {
         $set: { 'rateList': currencyRateObj.rateList },
-        $currentDate: { lastModified: true }
-      }
+        $currentDate: { lastModified: true },
+      },
       );
       res.send(`DB update successful. Updated on ${new Date()}.`);
   } catch(error) {
