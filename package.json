@@ -2,10 +2,9 @@
   "name": "currency-converter-server",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
   "scripts": {
-    "dev": "nodemon server.js",
-    "start": "node server.js"
+    "dev": "nodemon ./api/index.js",
+    "start": "node ./api/index.js"
   },
   "keywords": [],
   "author": "",
